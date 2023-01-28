@@ -14,13 +14,7 @@ def home(request):
         'recipes': recipes
     })
 
-def recipe(request, id):
-    recipe =  get_object_or_404(Recipe, id=id)
 
-    return render(request, 'recipes/pages/recipe-view.html', context={
-        'recipe': recipe,
-        'is_datail_page': True,
-    })
 
 def category(request, category_id):
     recipes = get_list_or_404(
@@ -33,3 +27,11 @@ def category(request, category_id):
         'recipes': recipes,
         'title':f'{recipes[0].category} - Category |'
     }) 
+
+def recipe(request, id):
+    recipe =  get_object_or_404(Recipe, id=id)
+
+    return render(request, 'recipes/pages/recipe-view.html', context={
+        'recipe': recipe,
+        'is_datail_page': True,
+    })
