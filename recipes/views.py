@@ -6,7 +6,7 @@ from .models import Category
 
 
 def home(request):
-    recipes = Recipe.objects.filter(
+    recipes =  Recipe.objects.filter(
         is_published=True
         ).order_by('-id')
 
