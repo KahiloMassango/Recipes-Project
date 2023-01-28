@@ -9,12 +9,14 @@ def home(request):
     recipes = Recipe.objects.filter(
         is_published=True
         ).order_by('-id')
+
     return render(request, 'recipes/pages/home.html', context={
         'recipes': recipes
     })
 
 def recipe(request, id):
-    recipe = Recipe.objects.get(id=id)
+    recipe =  get_object_or_404(Recipe, id=id)
+
     return render(request, 'recipes/pages/recipe-view.html', context={
         'recipe': recipe,
         'is_datail_page': True,
