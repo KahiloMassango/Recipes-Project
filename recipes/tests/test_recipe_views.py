@@ -37,6 +37,19 @@ class RecipeViewsTest(RecipeTestBase):
         self.assertIn('Recipe Title', content)
         self.assertEqual(len(response_context_recipes), 1)
 
+    def test_recipe_home_template_dont_loads_unplubished_recipes(self):
+        """Testing recipe is_published = False don't show"""
+        # Need a recipe for this test
+        self.make_recipe(is_published=False)
+
+        response = self.client.get(reverse('recipes:home'))
+
+        # Check if one recipe exists  
+        self.assertIn(
+            '<h1>No recipes found here!</h1>',
+            response.content.decode('utf-8'))
+
+
 
     def test_recipe_category_views_function_is_correct(self):
         view = resolve(
@@ -44,7 +57,14 @@ class RecipeViewsTest(RecipeTestBase):
         self.assertIs(view.func, views.category)
 
     def test_recipe_category_view_returns_404_if_no_recipes_found(self):
-        response = self.client.get(reverse('recipes:category', kwargs={'category_id': 1000}))
+        response = self.client.get(
+            reverse(
+            'recipes:category', 
+            kwargs={'category_id': 1000
+                    }
+                )
+            )
+        
         self.assertEqual(response.status_code, 404)
 
     def test_recipe_category_template_loads_recipes(self):
@@ -52,11 +72,20 @@ class RecipeViewsTest(RecipeTestBase):
         # Need a recipe for this test
         self.make_recipe(title=title_test)
 
-        response = self.client.get(reverse('recipes:category', kwargs={'category_id':1}))
-        content = response.content.decode('utf-8')
+    def test_recipe_category_template_dont_loads_unplubished_recipes(self):
+        """Testing recipe is_published = False don't show"""
+        # Need a recipe for this test
+        recipe = self.make_recipe(is_published=False)
 
-        # Check if one recipe exists  
-        self.assertIn(title_test, content)
+        response = self.client.get(
+            reverse(
+            'recipes:category', 
+            kwargs={'category_id': recipe.category.id
+                }
+            )
+        )
+ 
+        self.assertEqual(response.status_code, 404)
 
 
     def test_recipe_detail_views_function_is_correct(self):
