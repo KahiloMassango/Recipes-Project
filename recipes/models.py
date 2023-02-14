@@ -13,10 +13,12 @@ class Recipe(models.Model):
 
     Prep_unit_choices = (
         ('Minuto/s', 'Minuto/s'),
-        ('Hora/s', 'Hora/s'),)
+        ('Hora/s', 'Hora/s')
+        )
 
     Servings_unit_choices = (
-        ('Pessoas/s','Pessoas/s'),
+        ('Pessoa/s','Pessoa/s'),
+        ('Prato/s', 'Prato/s')
     )
     # title description slug
     title = models.CharField(max_length=65)
@@ -24,10 +26,10 @@ class Recipe(models.Model):
     slug = models.SlugField()
     # preparation_time preparation_time_unit
     preparation_time = models.IntegerField()
-    preparation_time_unit = models.CharField(max_length=15, choices=Prep_unit_choices, default="MINUTO/S")
+    preparation_time_unit = models.CharField(max_length=65, choices=Prep_unit_choices, default="Minuto/s")
     # servings servings_unit
     servings = models.IntegerField()
-    servings_unit = models.CharField(max_length=15,  choices=Servings_unit_choices, default="PESSOA/S")
+    servings_unit = models.CharField(max_length=65,  choices=Servings_unit_choices, default="Prato/s")
     # preparation_step
     preparation_steps = models.TextField()
     # preparation_step_is_html

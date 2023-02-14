@@ -67,6 +67,11 @@ class RecipeViewsTest(RecipeTestBase):
         
         self.assertEqual(response.status_code, 404)
 
+    def test_recipe_category_view_loads_correct_template(self):
+        recipe = self.make_recipe(is_published=True)
+        response = self.client.get(reverse('recipes:category', kwargs={'category_id': recipe.category.id}))
+        self.assertTemplateUsed(response, 'recipes/pages/category.html')
+
     def test_recipe_category_template_loads_recipes(self):
         title_test = 'Category test'
         # Need a recipe for this test
@@ -103,7 +108,6 @@ class RecipeViewsTest(RecipeTestBase):
 
         response = self.client.get(reverse('recipes:recipe', kwargs={'id':1}))
         content = response.content.decode('utf-8')
-
         # Check if one recipe exists  
         self.assertIn(title_test, content)
 
