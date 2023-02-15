@@ -43,9 +43,13 @@ def search(request):
         raise Http404
 
     recipes = Recipe.objects.filter(
-        Q(title__icontains=search_term) |
-        Q(description__icontains=search_term)  
-    ).order_by('-id')
+        Q(
+            Q(title__icontains=search_term) |
+            Q(description__icontains=search_term)
+        ),
+        is_published=True)
+    recipes = recipes.order_by('-id')
+    #recipes = recipes.filter(is_published=True)
 
     '''to make a queryset using OR operator use pipe "|" with Q. 
     or just use the way below
