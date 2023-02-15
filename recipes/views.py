@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import Http404 
 from utils.recipe.factory import make_recipe
@@ -36,15 +37,23 @@ def recipe(request, id):
     })
 
 def search(request):
-    search_term = request.GET.get('q')
+    search_term = request.GET.get('q', '').strip()
 
     if not search_term:
         raise Http404
-    
-    if len(search_term.strip()) <= 0:
-        raise Http404
+
+    recipes = Recipe.objects.filter(
+        Q(title__icontains=search_term) |
+        Q(description__icontains=search_term)  
+    ).order_by('-id')
+
+    '''to make a queryset using OR operator use pipe "|" with Q. 
+    or just use the way below
+    recipes = Recipe.objects.filter(title__icontains=TERM_HERE) | Recipe.objects.filter(description__icontains=TERM_HERE)
+    '''
 
     return render(request,'recipes/pages/search.html', {
         'page_title': f'Search for "{search_term}" |',
-        'search_term': search_term
+        'search_term': search_term,
+        'recipes': recipes
     })
