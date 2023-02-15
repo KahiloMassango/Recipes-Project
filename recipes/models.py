@@ -23,7 +23,7 @@ class Recipe(models.Model):
     # title description slug
     title = models.CharField(max_length=65)
     description = models.CharField(max_length=165)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     # preparation_time preparation_time_unit
     preparation_time = models.IntegerField()
     preparation_time_unit = models.CharField(max_length=65, choices=Prep_unit_choices, default="Minuto/s")
