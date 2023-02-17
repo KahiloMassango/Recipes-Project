@@ -1,7 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import Http404 
-from utils.recipe.factory import make_recipe
 from .models import Recipe
 from .models import Category
 # Create your views here.
