@@ -2,8 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import Http404 
 from .models import Recipe
-from utils.pagination import make_pagination_range
-from django.core.paginator import Paginator
+from utils.pagination import make_pagination
 # Create your views here.
 
 
@@ -11,18 +10,8 @@ def home(request):
     recipes =  Recipe.objects.filter(
         is_published=True
         ).order_by('-id')
-    try:
-        current_page = int(request.GET.get('page', 1))
-    except ValueError:
-        current_page = 1
-    paginator = Paginator(recipes, 9)   
-    page_obj = paginator.get_page(current_page)
-
-    pagination_range = make_pagination_range(
-        paginator.page_range,
-        8,
-        current_page
-                                             )
+    
+    page_obj, pagination_range = make_pagination(request, recipes, 9)
 
     return render(request, 'recipes/pages/home.html', context={
         'recipes': page_obj,
@@ -35,10 +24,12 @@ def category(request, category_id):
         category_id=category_id, 
         is_published=True
         ).order_by('-id'))
+    page_obj, pagination_range = make_pagination(request, recipes, 9)
 
     return render(request, 'recipes/pages/category.html', context={
-        'recipes': recipes,
-        'title':f'{recipes[0].category} - Category |'
+        'recipes': page_obj,
+        'title':f'{recipes[0].category} - Category |',
+        'pagination_range': pagination_range 
     }) 
 
 def recipe(request, id):
@@ -62,6 +53,9 @@ def search(request):
         ),
         is_published=True)
     recipes = recipes.order_by('-id')
+
+    page_obj, pagination_range = make_pagination(request, recipes, 9)
+
     #recipes = recipes.filter(is_published=True)
 
     '''to make a queryset using OR operator use pipe "|" with Q. 
@@ -72,5 +66,7 @@ def search(request):
     return render(request,'recipes/pages/search.html', {
         'page_title': f'Search for "{search_term}" |',
         'search_term': search_term,
-        'recipes': recipes
+        'recipes': page_obj,
+        'pagination_range':pagination_range,
+        'additional_url_query':f'&q={search_term}'
     })
