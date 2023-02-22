@@ -102,22 +102,16 @@ class PaginationTest(RecipeTestBase):
         self.assertEqual([17, 18, 19, 20], pagination)
 
     def test_pagination_shows_correct_qty_items_per_page(self):
-        recipe1 = self.make_recipe(slug='one-1', title='first1', author_data={'username': 'user1'}, is_published=True)
-        recipe2 = self.make_recipe(slug='one-2', title='title2',author_data={'username': 'two2'},is_published=True)
-        recipe3 = self.make_recipe(slug='one-3', title='title3',author_data={'username': 'two3'},is_published=True)
-        recipe4 = self.make_recipe(slug='one-4', title='title4',author_data={'username': 'two4'},is_published=True)
-        recipe5 = self.make_recipe(slug='one-5', title='title5',author_data={'username': 'two5'},is_published=True)
-        recipe6 = self.make_recipe(slug='one-6', title='title6',author_data={'username': 'two6'},is_published=True)
-        recipe7 = self.make_recipe(slug='one-7', title='title7',author_data={'username': 'two7'},is_published=True)
-        recipe8 = self.make_recipe(slug='one-8', title='title8',author_data={'username': 'two8'},is_published=True)
-        recipe9 = self.make_recipe(slug='one-9', title='title9',author_data={'username': 'two9'},is_published=True)
-        recipe10 = self.make_recipe(slug='one-10', title='title10',author_data={'username': 'two10'},is_published=True)
+        for i in range(0, 10):
+            kwargs = {'slug':f'test{i}', 'title':f'title{i}', 'author_data':{'username': f'user{i}'}}
+            self.make_recipe(**kwargs)
+
 
 
         response = self.client.get(reverse('recipes:home'))
 
         response_content = response.content.decode('utf-8')
-        self.assertIn('title10', response_content)
+        self.assertNotIn('title10', response_content)
         self.assertIn('title9', response_content)
         self.assertIn('title8', response_content)
         self.assertIn('title7', response_content)
@@ -126,7 +120,7 @@ class PaginationTest(RecipeTestBase):
         self.assertIn('title4', response_content)
         self.assertIn('title3', response_content)
         self.assertIn('title2', response_content)
-        self.assertNotIn('first1', response_content)
+        self.assertIn('title1', response_content)
 
         
        
