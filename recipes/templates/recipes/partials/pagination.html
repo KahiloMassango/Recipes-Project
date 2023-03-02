@@ -3,7 +3,7 @@
         <div class="pagination-content">
 
             {% if pagination_range.first_page_out_of_range %}
-                <a href="?pages=1{{ additional_url_query }}" class="page-link page-item">1</a>
+                <a href="?page=1{{ additional_url_query }}" class="page-link page-item">1</a>
                 <span class="page-item">...</span>
             {% endif %}
 
@@ -17,7 +17,7 @@
 
             {% if pagination_range.last_page_out_of_range %}
                 <span class="page-item">...</span>
-                <a href="?pages={{ pagination_range.total_pages }}{{ additional_url_query }}" class="page-link page-item">{{ pagination_range.total_pages }}</a>
+                <a href="?page={{ pagination_range.total_pages }}{{ additional_url_query }}" class="page-link page-item">{{ pagination_range.total_pages }}</a>
             {% endif %}
 
         </div>
