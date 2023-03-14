@@ -2,10 +2,11 @@ from django.urls import reverse, resolve
 from recipes import views
 from .test_recipe_base import RecipeTestBase
 
-class RecipeSearchViewTest(RecipeTestBase):    
+
+class RecipeSearchViewTest(RecipeTestBase):
     def test_recipe_search_view_function_is_correct(self):
         url = reverse('recipes:search')
-        resolved = resolve(url) 
+        resolved = resolve(url)
         self.assertIs(resolved.func, views.search)
 
     def test_recipe_search_view_loads_correct_template(self):
@@ -14,7 +15,7 @@ class RecipeSearchViewTest(RecipeTestBase):
         self.assertTemplateUsed(response, 'recipes/pages/search.html')
 
     def test_recipes_search_raises_404_if_no_search_term(self):
-        url = reverse('recipes:search' ) 
+        url = reverse('recipes:search')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
@@ -25,13 +26,13 @@ class RecipeSearchViewTest(RecipeTestBase):
             'Search for &quot;test&quot;',
             response.content.decode('utf-8')
          )
-        
+
     def test_recipe_search_can_find_recipe_by_title(self):
         title1 = 'This is recipe one'
         title2 = 'This is recipe two'
 
-        recipe1 = self.make_recipe(slug='one', title=title1, author_data={'username': 'one'})
-        recipe2 = self.make_recipe(slug='two', title=title2, author_data={'username': 'two'})
+        recipe1 = self.make_recipe(slug='one', title=title1, author_data={'username': 'one'})  # noqa: E501
+        recipe2 = self.make_recipe(slug='two', title=title2, author_data={'username': 'two'})  # noqa: E501
 
         search_url = reverse('recipes:search')
         response1 = self.client.get(f'{search_url}?q={title1}')
@@ -46,4 +47,3 @@ class RecipeSearchViewTest(RecipeTestBase):
 
         self.assertIn(recipe1, response_both.context['recipes'])
         self.assertIn(recipe2, response_both.context['recipes'])
-        

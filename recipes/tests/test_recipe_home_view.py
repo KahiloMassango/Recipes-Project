@@ -3,6 +3,7 @@ from recipes import views
 from .test_recipe_base import RecipeTestBase
 from unittest.mock import patch
 
+
 class RecipeHomeViewTest(RecipeTestBase):
     def test_recipe_home_views_function_is_correct(self):
         view = resolve(reverse('recipes:home'))
@@ -21,11 +22,7 @@ class RecipeHomeViewTest(RecipeTestBase):
         self.assertIn(
             '<h1>No recipes found here!</h1>',
             response.content.decode('utf-8'))
-        
-    def test_recipe_home_view_loads_correct_template(self):
-        response = self.client.get(reverse('recipes:home'))
-        self.assertTemplateUsed(response, 'recipes/pages/home.html')
-   
+
     def test_recipe_home_template_loads_recipes(self):
         # Need a recipe for this test
         self.make_recipe()
@@ -34,7 +31,7 @@ class RecipeHomeViewTest(RecipeTestBase):
         content = response.content.decode('utf-8')
         response_context_recipes = response.context['recipes']
 
-        # Check if one recipe exists  
+        # Check if one recipe exists
         self.assertIn('Recipe Title', content)
         self.assertEqual(len(response_context_recipes), 1)
 
@@ -45,14 +42,14 @@ class RecipeHomeViewTest(RecipeTestBase):
 
         response = self.client.get(reverse('recipes:home'))
 
-        # Check if one recipe exists  
+        # Check if one recipe exists
         self.assertIn(
             '<h1>No recipes found here!</h1>',
             response.content.decode('utf-8'))
-        
+
     def test_recipe_home_is_paginated(self):
         for i in range(8):
-            kwargs = {'slug':f'test{i}', 'title':f'title{i}', 'author_data':{'username': f'user{i}'}}
+            kwargs = {'slug': f'test{i}', 'title': f'title{i}', 'author_data': {'username': f'user{i}'}}  # noqa: E501
             self.make_recipe(**kwargs)
         with patch('recipes.views.PER_PAGE', new=3):
             response = self.client.get(reverse('recipes:home'))
@@ -62,11 +59,3 @@ class RecipeHomeViewTest(RecipeTestBase):
             self.assertEqual(len(paginator.get_page(1)), 3)
             self.assertEqual(len(paginator.get_page(2)), 3)
             self.assertEqual(len(paginator.get_page(3)), 2)
-
-        
-
-        
-
-
-
-    

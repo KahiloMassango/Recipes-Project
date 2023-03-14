@@ -7,25 +7,24 @@ class RecipeModelTest(RecipeTestBase):
     def setUp(self):
         self.recipe = self.make_recipe()
         return super().setUp()
-    
+
     def make_recipe_no_defaults(self):
-        recipe =  Recipe.objects.create(
-            category = self.make_category(name='Test Default Category'),
-            author = self.make_author(username='newuser'),
-            title = 'Recipe Title',
-            description = 'Recipe Description',
-            slug = 'recipe-slug-01',
-            preparation_time = 10,
-            preparation_time_unit = 'Minuto/s',
-            servings = 5,
-            servings_unit = 'Prato/s',
-            preparation_steps = 'Recipe Preparation Steps',
+        recipe = Recipe.objects.create(
+            category=self.make_category(name='Test Default Category'),
+            author=self.make_author(username='newuser'),
+            title='Recipe Title',
+            description='Recipe Description',
+            slug='recipe-slug-01',
+            preparation_time=10,
+            preparation_time_unit='Minuto/s',
+            servings=5,
+            servings_unit='Prato/s',
+            preparation_steps='Recipe Preparation Steps',
         )
         recipe.full_clean()
         recipe.save()
         return recipe
 
-    
     @parameterized.expand([
         ('title', 65),
         ('description', 165),
@@ -43,7 +42,7 @@ class RecipeModelTest(RecipeTestBase):
             recipe.preparation_step_is_html,
             msg='Recipe preparation_step_is_html must be false by default"'
             )
-        
+
     def test_recipe_is_published_is_false_by_default(self):
         recipe = self.make_recipe_no_defaults()
         self.assertFalse(
@@ -58,5 +57,3 @@ class RecipeModelTest(RecipeTestBase):
             str(self.recipe), recipe_title,
             msg=f'Recipe string representation must be "{recipe_title}"'
             )
-        
-
