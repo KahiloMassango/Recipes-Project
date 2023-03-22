@@ -10,6 +10,7 @@ class RegisterForm(forms.ModelForm):
         help_text=(
             'Password must have at least one uppercase letter,'
             'one lowercase letter and one number.'
+            'Length should be at least 8 charecters.'
         ),
         error_messages={
             'required': 'Password must not be empty'
@@ -42,7 +43,7 @@ class RegisterForm(forms.ModelForm):
         }
         error_messages = {
             'username': {
-                'required': 'This fiels must not be empty.',
+                'required': 'Username must not be empty.',
             }
         }
         widgets = {
@@ -73,3 +74,15 @@ class RegisterForm(forms.ModelForm):
             )
 
         return data
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+
+        if password != password2:
+            password_confirmation_error = ValidationError('Password and Password2 must be equal', code='invalid')  # noqa   
+            raise ValidationError({
+                'password': password_confirmation_error,
+                'password2': password_confirmation_error,
+            })
