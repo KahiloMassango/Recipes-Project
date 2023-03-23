@@ -1,10 +1,20 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+import re
+
+
+def strong_password(password):
+    regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
+    if not regex.match(password):
+        raise ValidationError(
+            'Password does not meet the requirements'
+        )
 
 
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(
+        label='fsfsdfsdfs',
         required=True,
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
         help_text=(
@@ -14,7 +24,8 @@ class RegisterForm(forms.ModelForm):
         ),
         error_messages={
             'required': 'Password must not be empty'
-        }
+        },
+        validators=[strong_password]
         )
     password2 = forms.CharField(
         label='Confirm password',
@@ -36,7 +47,6 @@ class RegisterForm(forms.ModelForm):
             'first_name': 'First name',
             'last_name': 'Last name',
             'email': 'E-mail',
-            'password': 'Password',
         }
         help_texts = {
             'email': 'E-mail must be valid.'
@@ -77,6 +87,7 @@ class RegisterForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        print(cleaned_data)
         password = cleaned_data.get('password')
         password2 = cleaned_data.get('password2')
 
