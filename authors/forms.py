@@ -14,17 +14,18 @@ def strong_password(password):
 
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(
-        label='fsfsdfsdfs',
+        label='Password',
         required=True,
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
         help_text=(
-            'Password must have at least one uppercase letter,'
+            'Password must have at least one uppercase letter'
             'one lowercase letter and one number.'
             'Length should be at least 8 charecters.'
         ),
         error_messages={
             'required': 'Password must not be empty'
         },
+
         validators=[strong_password]
         )
     password2 = forms.CharField(
@@ -57,10 +58,10 @@ class RegisterForm(forms.ModelForm):
             }
         }
         widgets = {
-            'first_name': forms.TextInput(attrs={'placeholder': 'First Name'}),
-            'last_name': forms.TextInput(attrs={'placeholder': 'Last Name'}),
-            'username': forms.TextInput(attrs={'placeholder': 'Username'}),
-            'email': forms.EmailInput(attrs={'placeholder': 'E-mail'})
+            'first_name': forms.TextInput(attrs={'placeholder': 'Ex.: John'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Ex.: Doe'}),
+            'username': forms.TextInput(attrs={'placeholder': 'Your username'}),  # noqa
+            'email': forms.EmailInput(attrs={'placeholder': 'Your e-mail'})
         }
 
     def clean_first_name(self):
