@@ -18,7 +18,7 @@ class AuthorRegisterFormUnitTest(TestCase):
         self.assertEqual(placeholder, current_placeholder)
 
     @parameterized.expand([
-        ('username', ('Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_ apenas.')),
+        ('username', ('Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_ apenas.')),  # noqa
         ('email', 'E-mail must be valid.'),
         ('password', (
             'Password must have at least one uppercase letter'
