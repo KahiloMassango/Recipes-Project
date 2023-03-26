@@ -1,5 +1,6 @@
-from django.test import TestCase
+# from django.test import TestCase
 from authors.forms import RegisterForm
+from unittest import TestCase
 from parameterized import parameterized
 
 
