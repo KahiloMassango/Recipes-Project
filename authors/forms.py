@@ -64,28 +64,6 @@ class RegisterForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'placeholder': 'Your e-mail'})
         }
 
-    def clean_first_name(self):
-        data = self.cleaned_data.get('first_name')
-
-        if 'kahilo' in data:
-            raise ValidationError(
-                'Não digiet "kahilo" no first name',
-                code='invalid'
-            )
-
-        return data
-
-    def clean_password(self):
-        data = self.cleaned_data.get('password')
-
-        if 'kahilo' in data:
-            raise ValidationError(
-                'Não digite "kahilo" em password',
-                code='invalid'
-            )
-
-        return data
-
     def clean(self):
         cleaned_data = super().clean()
         print(cleaned_data)
