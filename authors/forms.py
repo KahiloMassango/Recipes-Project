@@ -13,9 +13,25 @@ def strong_password(password):
 
 
 class RegisterForm(forms.ModelForm):
+
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Ex.: John'}),
+        error_messages={'required': 'Write your first name'},
+        label='First name'
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Ex.: Doe'}),
+        error_messages={'required': 'Write your last name'},
+        label='Last name'
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'placeholder': 'Your e-mail'}),
+        error_messages={'required': 'E-mail is required'},
+        label='E-mail',
+        help_text='The e-mail must be valid.',
+    )
     password = forms.CharField(
         label='Password',
-        required=True,
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
         help_text=(
             'Password must have at least one uppercase letter'
@@ -29,9 +45,9 @@ class RegisterForm(forms.ModelForm):
         validators=[strong_password]
         )
     password2 = forms.CharField(
-        label='Confirm password',
-        required=True,
-        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password'})
+        label='Password2',
+        widget=forms.PasswordInput(attrs={'placeholder': 'Repeat your password'}),  # noqa
+        error_messages={'required': 'Please, repeat your password'}
         )
 
     class Meta:
@@ -45,23 +61,14 @@ class RegisterForm(forms.ModelForm):
         ]
         labels = {
             'username': 'Username',
-            'first_name': 'First name',
-            'last_name': 'Last name',
-            'email': 'E-mail',
-        }
-        help_texts = {
-            'email': 'E-mail must be valid.'
         }
         error_messages = {
             'username': {
-                'required': 'Username must not be empty.',
+                'required': 'This field must not be empty'
             }
         }
         widgets = {
-            'first_name': forms.TextInput(attrs={'placeholder': 'Ex.: John'}),
-            'last_name': forms.TextInput(attrs={'placeholder': 'Ex.: Doe'}),
             'username': forms.TextInput(attrs={'placeholder': 'Your username'}),  # noqa
-            'email': forms.EmailInput(attrs={'placeholder': 'Your e-mail'})
         }
 
     def clean(self):
