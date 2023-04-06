@@ -14,6 +14,20 @@ def strong_password(password):
 
 class RegisterForm(forms.ModelForm):
 
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Your username'}),
+        label='Username',
+        help_text=(
+            'Username must have letters, numbers or one of those @.+-_.'
+            'The length should be between 4 and 150 characters.'
+        ),
+        error_messages={
+            'required': 'This field must not be empty',
+            'min_length': 'Username must have at least 4 characters',
+            'max_length': 'Username must have less than 150 characters',
+        },
+        min_length=4, max_length=150,
+    )
     first_name = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': 'Ex.: John'}),
         error_messages={'required': 'Write your first name'},
@@ -28,7 +42,7 @@ class RegisterForm(forms.ModelForm):
         widget=forms.EmailInput(attrs={'placeholder': 'Your e-mail'}),
         error_messages={'required': 'E-mail is required'},
         label='E-mail',
-        help_text='The e-mail must be valid.',
+        help_text='The e-mail must be valid',
     )
     password = forms.CharField(
         label='Password',
@@ -39,7 +53,12 @@ class RegisterForm(forms.ModelForm):
             'Length should be at least 8 charecters.'
         ),
         error_messages={
-            'required': 'Password must not be empty'
+            'required': 'Password must not be empty',
+            'error': (
+                'Password does not meet the requirements'
+                'Password and Password2 must be equal'
+                'at least 8 characters.'
+            )
         },
 
         validators=[strong_password]
@@ -59,17 +78,6 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password',
         ]
-        labels = {
-            'username': 'Username',
-        }
-        error_messages = {
-            'username': {
-                'required': 'This field must not be empty'
-            }
-        }
-        widgets = {
-            'username': forms.TextInput(attrs={'placeholder': 'Your username'}),  # noqa
-        }
 
     def clean(self):
         cleaned_data = super().clean()
