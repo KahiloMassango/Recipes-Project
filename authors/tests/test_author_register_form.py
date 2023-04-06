@@ -25,7 +25,7 @@ class AuthorRegisterFormUnitTest(TestCase):
                       'The length should be between 4 and 150 characters.')),  # noqa
         ('email', 'The e-mail must be valid'),
         ('password', (
-            'Password must have at least one uppercase letter'
+            'Password must have at least one uppercase letter, '
             'one lowercase letter and one number.'
             'Length should be at least 8 charecters.'
         )),

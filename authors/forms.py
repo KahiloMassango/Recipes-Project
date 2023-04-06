@@ -48,7 +48,7 @@ class RegisterForm(forms.ModelForm):
         label='Password',
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
         help_text=(
-            'Password must have at least one uppercase letter'
+            'Password must have at least one uppercase letter, '
             'one lowercase letter and one number.'
             'Length should be at least 8 charecters.'
         ),
@@ -78,6 +78,16 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password',
         ]
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '')
+        exists = User.objects.filter(email=email).exists
+
+        if exists:
+            raise ValidationError(
+                'User e-mail is already in use', code='invalid'
+                )  # noqa
+        return email
 
     def clean(self):
         cleaned_data = super().clean()
